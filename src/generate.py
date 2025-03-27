@@ -32,7 +32,12 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
     
             content = markdown_to_html_node(markdown).to_html()
             title = extract_title(markdown)
-            html_output = template.replace("{{ Title }}", title).replace("{{ Content }}", content).replace("href=\"/", f"href=\"{basepath}").replace("src=\"/", f"src=\"{basepath}")
+            html_output = (
+                template.replace("{{ Title }}", title)
+                .replace("{{ Content }}", content)
+                .replace('href="/', f'href="{basepath}')
+                .replace('src="/', f'src="{basepath}')
+            )
 
             os.makedirs(os.path.dirname(dest_html_path), exist_ok=True)
 
