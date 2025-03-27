@@ -11,7 +11,7 @@ def extract_title(markdown):
             return block.lstrip("#").strip()
     raise Exception("Invalid markdown: no title")
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
 
     items = os.listdir(dir_path_content)
     print(f"Items under {dir_path_content}: {items}")
@@ -32,7 +32,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
     
             content = markdown_to_html_node(markdown).to_html()
             title = extract_title(markdown)
-            html_output = template.replace("{{ Title }}", title).replace("{{ Content }}", content)
+            html_output = template.replace("{{ Title }}", title).replace("{{ Content }}", content).replace("href=\"/", f"href=\"{basepath}").replace("src=\"/", f"src=\"{basepath}")
 
             os.makedirs(os.path.dirname(dest_html_path), exist_ok=True)
 
@@ -42,7 +42,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
             print(f"Page successfully generated at {dest_html_path}")
         
         else:
-            generate_pages_recursive(from_full_path, template_path, dest_full_path)
+            generate_pages_recursive(from_full_path, template_path, dest_full_path, basepath)
         
 
  
